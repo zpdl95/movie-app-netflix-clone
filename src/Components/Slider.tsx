@@ -160,7 +160,8 @@ interface ISlider {
 }
 
 function Slider({ datas, title, sliderid }: ISlider) {
-  const [offset, setOffset] = useState(6);
+  // const [offset, setOffset] = useState(6);
+  let offset = 6;
   const history = useHistory();
   /* Row가 사라지는 상태를 저장. 애니메이션이 안 겹치게 하기 위함 */
   const [index, setIndex] = useState(0);
