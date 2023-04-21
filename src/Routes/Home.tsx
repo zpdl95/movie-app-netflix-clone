@@ -1,12 +1,12 @@
-import { AnimatePresence, useViewportScroll } from "framer-motion";
-import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import { useRouteMatch } from "react-router-dom";
-import styled from "styled-components";
-import { IGetMoviesResult, IMovieVideo, movieApi } from "../api";
-import BigCenterBox from "../Components/BigCenterBox";
-import Slider, { NEXFLIX_LOGO_URL } from "../Components/Slider";
-import { makeImagePath } from "../utils";
+import { AnimatePresence, useViewportScroll } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
+import { useRouteMatch } from 'react-router-dom';
+import styled from 'styled-components';
+import { IGetMoviesResult, IMovieVideo, movieApi } from '../api';
+import BigCenterBox from '../Components/BigCenterBox';
+import Slider, { NEXFLIX_LOGO_URL } from '../Components/Slider';
+import { makeImagePath } from '../utils';
 
 export const Wrapper = styled.div<{ centerBox: boolean }>``;
 
@@ -68,29 +68,26 @@ export const SliderWrapper = styled.div`
 
 function Home() {
   const [bannerIndex, setBannerIndex] = useState<number>();
-  const [bannerVideoKey, setBennerVideoKey] = useState("");
+  const [bannerVideoKey, setBennerVideoKey] = useState('');
 
   const { scrollY } = useViewportScroll();
   useEffect(() => {
-    scrollY.onChange(() => {
-      console.log("home1", scrollY.get());
-      console.log("home2", window.scrollY);
-    });
+    scrollY.onChange(() => {});
   }, [scrollY]);
 
   const { data: nowPlayingData, isLoading: nowPlayingIsLoading } =
     useQuery<IGetMoviesResult>(
-      ["movies", "nowPlaying"],
+      ['movies', 'nowPlaying'],
       movieApi.getNowPlaying
     );
   const { data: popularData, isLoading: popularIsLoading } =
-    useQuery<IGetMoviesResult>(["movies", "popular"], movieApi.getPopular);
+    useQuery<IGetMoviesResult>(['movies', 'popular'], movieApi.getPopular);
   const { data: topRatedData, isLoading: topRatedIsLoading } =
-    useQuery<IGetMoviesResult>(["movies", "topRated"], movieApi.getTopRated);
+    useQuery<IGetMoviesResult>(['movies', 'topRated'], movieApi.getTopRated);
   const { data: upcomingData, isLoading: upcomingIsLoading } =
-    useQuery<IGetMoviesResult>(["movies", "upcoming"], movieApi.getUpcoming);
+    useQuery<IGetMoviesResult>(['movies', 'upcoming'], movieApi.getUpcoming);
   const { data: bannerVideoData } = useQuery<IMovieVideo | null>(
-    ["movies", "bannerVideo"],
+    ['movies', 'bannerVideo'],
     () => movieApi.getVideos(nowPlayingData?.results[bannerIndex || 0].id),
     {
       enabled: bannerIndex !== undefined,
@@ -98,7 +95,7 @@ function Home() {
   );
 
   const bigMovieMatch = useRouteMatch<{ dataId: string; slideId: string }>(
-    "/movies/:slideId/:dataId"
+    '/movies/:slideId/:dataId'
   );
 
   const loading =
@@ -114,10 +111,10 @@ function Home() {
   }, [nowPlayingData]);
 
   useEffect(() => {
-    setBennerVideoKey("");
+    setBennerVideoKey('');
     if (bannerVideoData) {
       const videoArray = bannerVideoData.results.filter((video) =>
-        video.name.includes("예고편")
+        video.name.includes('예고편')
       );
       if (videoArray.length > 0) {
         setBennerVideoKey(videoArray[0].key);
@@ -152,30 +149,30 @@ function Home() {
             {bannerVideoKey && (
               <Video
                 src={`https://www.youtube.com/embed/${bannerVideoKey}?autoplay=1&mute=0`}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
               ></Video>
             )}
           </Banner>
           <SliderWrapper>
             <Slider
-              title="NowPlaying Movie"
+              title='NowPlaying Movie'
               datas={nowPlayingData}
-              sliderid={"now_playing"}
+              sliderid={'now_playing'}
             />
             <Slider
-              title="Popular Movie"
+              title='Popular Movie'
               datas={popularData}
-              sliderid={"popular"}
+              sliderid={'popular'}
             />
             <Slider
-              title="Upcoming Movie"
+              title='Upcoming Movie'
               datas={upcomingData}
-              sliderid={"upcoming"}
+              sliderid={'upcoming'}
             />
             <Slider
-              title="Top Rated Movie"
+              title='Top Rated Movie'
               datas={topRatedData}
-              sliderid={"top_rated"}
+              sliderid={'top_rated'}
             />
           </SliderWrapper>
           <AnimatePresence>{bigMovieMatch && <BigCenterBox />}</AnimatePresence>
