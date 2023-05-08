@@ -1,10 +1,5 @@
-import {
-  motion,
-  useAnimation,
-  useViewportScroll,
-  Variants,
-} from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { motion, useAnimation, Variants } from 'framer-motion';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
@@ -120,7 +115,7 @@ function Header() {
   const navAnimation = useAnimation();
   /* useViewportScroll = 스크롤의 모션을 감지해 좌표값 or 진행도를 알려줌 */
   /* scrollY이 값은 변해도 rerendering하지 않음 */
-  const { scrollY } = useViewportScroll();
+  // const { scrollY } = useViewportScroll();
   const scrollRef = useRef(0);
   const { register, handleSubmit, setValue, setFocus } = useForm<IForm>();
   const history = useHistory();
@@ -142,7 +137,7 @@ function Header() {
     toggleSearsh();
   };
 
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     scrollRef.current = document.body.scrollTop;
 
     if (scrollRef.current > 30) {
@@ -150,14 +145,14 @@ function Header() {
     } else {
       navAnimation.start('top');
     }
-  };
+  }, [navAnimation]);
 
   useEffect(() => {
     document.body.addEventListener('scroll', handleScroll);
     return () => {
       document.body.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [handleScroll]);
 
   // useEffect(() => {
   //   /* scrollY.onChange() 이것을 사용하지 않으면 변화를 감지할 수 없음 */
