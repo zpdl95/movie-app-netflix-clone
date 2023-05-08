@@ -153,6 +153,7 @@ function Home() {
               ></Video>
             )}
           </Banner>
+
           <SliderWrapper>
             <Slider
               title='NowPlaying Movie'

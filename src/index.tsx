@@ -1,11 +1,11 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { RecoilRoot } from "recoil";
-import { createGlobalStyle, ThemeProvider } from "styled-components";
-import { QueryClient, QueryClientProvider } from "react-query";
-import App from "./App";
-import { theme } from "./theme";
-import bgImg from "./asset/background.png";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { RecoilRoot } from 'recoil';
+import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import App from './App';
+import { theme } from './theme';
+import bgImg from './asset/background.png';
 
 const GlobalStyle = createGlobalStyle`
 /* "https://fonts.google.com"에서 폰트를 받아옴 */
@@ -68,6 +68,15 @@ body {
   background-image:url(${bgImg});
   overflow-x:hidden;
 }
+html,body{
+  height:100vh;
+  width:100vw;
+
+  overflow-x:hidden;
+}
+#root{
+  width:100%;
+}
 `;
 
 const client = new QueryClient();
@@ -84,5 +93,5 @@ ReactDOM.render(
       </QueryClientProvider>
     </RecoilRoot>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById('root')
 );

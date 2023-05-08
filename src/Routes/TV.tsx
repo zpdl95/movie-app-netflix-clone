@@ -1,11 +1,11 @@
-import { AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import { useRouteMatch } from "react-router-dom";
-import { IGetTVResult, tvApi } from "../api";
-import BigCenterBox from "../Components/BigCenterBox";
-import Slider, { NEXFLIX_LOGO_URL } from "../Components/Slider";
-import { makeImagePath } from "../utils";
+import { AnimatePresence } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
+import { useRouteMatch } from 'react-router-dom';
+import { IGetTVResult, tvApi } from '../api';
+import BigCenterBox from '../Components/BigCenterBox';
+import Slider, { NEXFLIX_LOGO_URL } from '../Components/Slider';
+import { makeImagePath } from '../utils';
 import {
   Banner,
   BannerInfo,
@@ -14,20 +14,20 @@ import {
   SliderWrapper,
   Title,
   Wrapper,
-} from "./Home";
+} from './Home';
 
 function TV() {
   const [bannerIndex, setBannerIndex] = useState(0);
 
   const { data: airingTodayData, isLoading: airingTodayIsLoading } =
-    useQuery<IGetTVResult>(["tv", "airingToday"], tvApi.getAiringToday);
+    useQuery<IGetTVResult>(['tv', 'airingToday'], tvApi.getAiringToday);
   const { data: popularData, isLoading: popularIsLoading } =
-    useQuery<IGetTVResult>(["tv", "popular"], tvApi.getPopular);
+    useQuery<IGetTVResult>(['tv', 'popular'], tvApi.getPopular);
   const { data: topRatedData, isLoading: topRatedIsLoading } =
-    useQuery<IGetTVResult>(["tv", "topRated"], tvApi.getTopRated);
+    useQuery<IGetTVResult>(['tv', 'topRated'], tvApi.getTopRated);
 
   const bigTVMatch = useRouteMatch<{ dataId: string; slideId: string }>(
-    "/tvs/:slideId/:dataId"
+    '/tvs/:slideId/:dataId'
   );
 
   const loading = airingTodayIsLoading || popularIsLoading || topRatedIsLoading;
@@ -61,21 +61,22 @@ function TV() {
               </Overview>
             </BannerInfo>
           </Banner>
+
           <SliderWrapper>
             <Slider
-              title="Airing Today TV Shows"
+              title='Airing Today TV Shows'
               datas={airingTodayData}
-              sliderid={"now_playing"}
+              sliderid={'now_playing'}
             />
             <Slider
-              title="Popular TV Shows"
+              title='Popular TV Shows'
               datas={popularData}
-              sliderid={"popular"}
+              sliderid={'popular'}
             />
             <Slider
-              title="Top Rated TV Shows"
+              title='Top Rated TV Shows'
               datas={topRatedData}
-              sliderid={"top_rated"}
+              sliderid={'top_rated'}
             />
           </SliderWrapper>
           <AnimatePresence>{bigTVMatch && <BigCenterBox />}</AnimatePresence>

@@ -1,30 +1,33 @@
-import { motion } from "framer-motion";
-import { useQuery } from "react-query";
-import { useHistory, useLocation, useRouteMatch } from "react-router-dom";
-import styled from "styled-components";
-import { IGetTVResult, movieApi, tvApi } from "../api";
-import { movieGenres } from "../movieGenres";
-import { makeImagePath } from "../utils";
-import { NEXFLIX_LOGO_URL } from "./Slider";
+import { motion } from 'framer-motion';
+import { useQuery } from 'react-query';
+import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
+import styled from 'styled-components';
+import { IGetTVResult, movieApi, tvApi } from '../api';
+import { movieGenres } from '../movieGenres';
+import { makeImagePath } from '../utils';
+import { NEXFLIX_LOGO_URL } from './Slider';
 
-const Wrapper = styled.div`
-  position: fixed;
-  top: 0;
-  z-index: 10;
+const Wrapper = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  z-index: 50;
 `;
 
 const Overlay = styled(motion.div)`
-  background-color: rgba(0, 0, 0, 0.7);
-  opacity: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
   position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0px;
+  left: 0px;
+  opacity: 0;
+  background-color: rgba(0, 0, 0, 0.7);
 `;
 
 const BigMovie = styled(motion.div)`
@@ -139,17 +142,17 @@ function BigCenterBox() {
     location: string;
     slideId: string;
     dataId: string;
-  }>("/:location/:slideId/:dataId");
+  }>('/:location/:slideId/:dataId');
   const { data: detailsData, isLoading: detailsIsLoading } =
     useQuery<IDetailsData | null>(
-      [bigLocationMatch?.params.location, "Details"],
+      [bigLocationMatch?.params.location, 'Details'],
       () =>
-        bigLocationMatch?.params.location === "movies"
+        bigLocationMatch?.params.location === 'movies'
           ? movieApi.getDetails(bigLocationMatch?.params.dataId)
-          : bigLocationMatch?.params.location === "tvs"
+          : bigLocationMatch?.params.location === 'tvs'
           ? tvApi.getDetails(bigLocationMatch?.params.dataId)
-          : bigLocationMatch?.params.location === "search"
-          ? bigLocationMatch?.params.slideId === "movie"
+          : bigLocationMatch?.params.location === 'search'
+          ? bigLocationMatch?.params.slideId === 'movie'
             ? movieApi.getDetails(bigLocationMatch?.params.dataId)
             : tvApi.getDetails(bigLocationMatch?.params.dataId)
           : null
@@ -160,15 +163,15 @@ function BigCenterBox() {
   const { data: detailSeasonData, isLoading: detailSeasonIsLoading } = useQuery<
     IDetailSeasonData[] | null
   >(
-    [bigLocationMatch?.params.location, "Details", "Season"],
+    [bigLocationMatch?.params.location, 'Details', 'Season'],
     () => tvApi.getSeasons(bigLocationMatch?.params.dataId, seasonNumbers),
     {
       enabled: !!detailsData?.seasons,
     }
   );
 
-  const tvShowsMatch = useRouteMatch("/tvs/:slideId/:dataId");
-  const searchTvShowsMatch = useRouteMatch("/search/tv/:dataId");
+  const tvShowsMatch = useRouteMatch('/tvs/:slideId/:dataId');
+  const searchTvShowsMatch = useRouteMatch('/search/tv/:dataId');
 
   const datas = location?.state?.sliderData;
 
@@ -180,14 +183,14 @@ function BigCenterBox() {
   const onOverlayClicked = () => {
     // "/movies..." -> "/" & "/tvs..." -> "/tvs"
     switch (bigLocationMatch?.params.location) {
-      case "movies":
-        history.push("/");
+      case 'movies':
+        history.push('/');
         break;
-      case "tvs":
-        history.push("/tvs");
+      case 'tvs':
+        history.push('/tvs');
         break;
-      case "search":
-        history.push("/search");
+      case 'search':
+        history.push('/search');
         break;
     }
   };
@@ -201,6 +204,7 @@ function BigCenterBox() {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       />
+
       <BigMovie
         layoutId={
           `${bigLocationMatch?.params.slideId}` +
@@ -212,11 +216,11 @@ function BigCenterBox() {
             <BigCover
               bgPhoto={
                 clickedData.backdrop_path
-                  ? makeImagePath(clickedData.backdrop_path, "w1280")
+                  ? makeImagePath(clickedData.backdrop_path, 'w1280')
                   : NEXFLIX_LOGO_URL
               }
             />
-            <BigPoster src={makeImagePath(clickedData.poster_path, "w500")} />
+            <BigPoster src={makeImagePath(clickedData.poster_path, 'w500')} />
             <BigTitle>{clickedData.title || clickedData.name}</BigTitle>
             {!loading ? (
               <BigInfo>
@@ -225,10 +229,10 @@ function BigCenterBox() {
                 </span>
                 <span>
                   {detailsData?.runtime === 0
-                    ? "00"
+                    ? '00'
                     : detailsData?.runtime ||
                       detailsData?.episode_run_time[0] ||
-                      "00"}
+                      '00'}
                   분
                 </span>
                 <span>
@@ -240,7 +244,7 @@ function BigCenterBox() {
                 <span>🧡{clickedData.vote_count}</span>
               </BigInfo>
             ) : (
-              "Loading..."
+              'Loading...'
             )}
             <BigOverview>{clickedData.overview}</BigOverview>
             {(tvShowsMatch?.isExact || searchTvShowsMatch?.isExact) &&
@@ -257,13 +261,13 @@ function BigCenterBox() {
                     <BigEpisodeDetail key={index}>
                       <summary
                         style={{
-                          display: "flex",
-                          justifyContent: "space-around",
+                          display: 'flex',
+                          justifyContent: 'space-around',
                         }}
                       >
                         <div>{s.name}</div>
                         <div>에피소드 수 : {s.episode_count}</div>
-                        <div>{s.air_date ? s.air_date : "coming soon"}</div>
+                        <div>{s.air_date ? s.air_date : 'coming soon'}</div>
                       </summary>
                       {detailSeasonData
                         ?.at(index)
@@ -271,8 +275,8 @@ function BigCenterBox() {
                           <Episode key={index}>
                             <span
                               style={{
-                                justifySelf: "end",
-                                marginRight: "50%",
+                                justifySelf: 'end',
+                                marginRight: '50%',
                               }}
                             >
                               {episode.episode_number}
@@ -285,7 +289,7 @@ function BigCenterBox() {
                   ))}
                 </BigEpisode>
               ) : (
-                "Loading..."
+                'Loading...'
               ))}
           </>
         )}
